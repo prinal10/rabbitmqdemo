@@ -18,7 +18,7 @@ public class Config {
     @PostConstruct
     public void sendData() {
         for(int i=1; i<11; i++) {
-            rabbitTemplate.convertAndSend(topicExchange.getName(), "test*","This is the Data in the Queue : " + i);
+            rabbitTemplate.convertAndSend(topicExchange.getName(), "test.kgbhjbjhv1","This is the Data in the Queue : " + i);
         }
     }
 

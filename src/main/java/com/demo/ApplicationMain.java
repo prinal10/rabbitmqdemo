@@ -1,9 +1,13 @@
 package com.demo;
 
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.config.BindingFactoryBean;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.ContentTypeDelegatingMessageConverter;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -70,9 +74,12 @@ public class ApplicationMain {
         return new Queue("test-queue2");
     }
 
-    @Bean
-    public Binding binding1(TopicExchange topicExchange, Queue queue1) {
-        return BindingBuilder.bind(queue1).to(topicExchange).with("test*");
+    @PostConstruct
+    public void setQueueProperties(){
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        rabbitAdmin.declareExchange(new TopicExchange("testTopic"));
+        rabbitAdmin.declareQueue(new Queue("test-queue1"));
+        rabbitAdmin.declareBinding(new Binding("test-queue1", Binding.DestinationType.QUEUE,"testTopic","test*",null));
     }
     @Bean
     public Binding binding2(TopicExchange topicExchange, Queue queue2) {
