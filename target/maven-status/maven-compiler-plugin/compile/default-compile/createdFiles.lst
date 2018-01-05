@@ -1,1 +1,6 @@
-com\demo\RabbitMQMain.class
+com\demo\ApplicationMain.class
+com\demo\config\Sender.class
+com\demo\config\SendMessage.class
+com\demo\config\Receiver$1.class
+com\demo\config\Receiver.class
+com\demo\config\Config.class
